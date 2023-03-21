@@ -66,63 +66,68 @@ for label in labels:
         get_ipython().system('mkdir {path}')
 
 
-# # 4. Capture Images
-
-# In[6]:
+  # 4. Capture Images
 
 
+# global variables
 capPort = 0
 z = 0
 
+# output function
 def output():
     
     while True:
+        # read camera
         ret, displayFrame = cap.read()
-
+		
+        # display video
         cv2.imshow('frame',displayFrame)
+        
+        # if captured, print it on the display as well 
         if z == 1:
             print('captured')
             cv2.putText(displayFrame, 'Captured', (640, 360), cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 255, 0), 2)
             time.sleep(1)
-        else:
-            continue
+            
         if cv2.waitKey(1) == ord('q'):
             print('q pressed, breaking')
             break
-        else:
-            print('. \n')
-
+            
+    # if while loop ends, camera is released and windows are destroyed
     cap.release()
     cv2.destroyAllWindows()
     
         
 
-
+# function capture
 def __capture__():  
-    global cap, z
-    read, pictureFrame = cap.read()
+	# values that are being editted // declare global variables
+	global cap, z
     i = 0
     y = 0
+    
     while i <= number_imgs and y<= (len(labels)-1):
-        # print(f'Collecting images for {labels[y]}')
+	    # read cap, new frame for picture
+        read, pictureFrame = cap.read()
+        
         if keyboard.is_pressed('c'):
                 z = 1
                 print(f'Collecting image {i} at labels {labels[y]}')
 
                 imgname = os.path.join(IMAGES_PATH,labels[y],labels[y]+'.'+'{}.jpg'.format(str(uuid.uuid1())))
                 cv2.imwrite(imgname, pictureFrame)
-                i +=1
-                time.sleep(1)
-
+                i += 1
+                
                 if i == number_imgs:
                     y+=1
                 
+                time.sleep(1)
+
                 if keyboard.is_pressed('q'):
                     cv2.release
                     exit()
         else:
             z = 0
-            continue
 
 
 def threader():
@@ -147,65 +152,6 @@ def threader():
 
 
 threader()
-
-
-# # 5. Image Labelling
-
-# In[ ]:
-
-
-get_ipython().run_line_magic('pip', 'install --upgrade pyqt5 lxml')
-
-
-# In[ ]:
-
-
-LABELIMG_PATH = os.path.join('Tensorflow', 'labelimg')
-
-
-# In[ ]:
-
-
-if not os.path.exists(LABELIMG_PATH):
-    get_ipython().system('mkdir {LABELIMG_PATH}')
-    get_ipython().system('git clone https://github.com/tzutalin/labelImg {LABELIMG_PATH}')
-
-
-# In[ ]:
-
-
-if os.name == 'posix':
-    get_ipython().system('make qt5py3')
-if os.name =='nt':
-    get_ipython().system('cd {LABELIMG_PATH} && pyrcc5 -o libs/resources.py resources.qrc')
-
-
-# In[ ]:
-
-
-get_ipython().system('cd {LABELIMG_PATH} && python labelImg.py')
-
-
-# # 6. Move them into a Training and Testing Partition
-
-# # OPTIONAL - 7. Compress them for Colab Training
-
-# In[ ]:
-
-
-TRAIN_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'train')
-TEST_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'test')
-ARCHIVE_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'archive.tar.gz')
-
-
-# In[ ]:
-
-
-get_ipython().system('tar -czf {ARCHIVE_PATH} {TRAIN_PATH} {TEST_PATH}')
-
-
-# In[ ]:
-
 
 
 
