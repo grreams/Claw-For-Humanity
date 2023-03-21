@@ -48,11 +48,6 @@ def __initializeCam__():
 
 
 
-
-
-
-
-
                         # com work
 
 # global variables for serial com
