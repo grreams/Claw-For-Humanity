@@ -9,7 +9,7 @@
 get_ipython().run_line_magic('pip', 'install opencv-python')
 
 
-# In[6]:
+# In[1]:
 
 
 # Import opencv
@@ -33,7 +33,7 @@ import threading
 
 # # 2. Define Images to Collect
 
-# In[7]:
+# In[2]:
 
 
 labels = ['thumbsup', 'thumbsdown', 'thankyou', 'livelong']
@@ -42,19 +42,19 @@ number_imgs = 5
 
 # # 3. Setup Folders 
 
-# In[8]:
+# In[3]:
 
 
 IMAGES_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'collectedimages')
 
 
-# In[9]:
+# In[4]:
 
 
 os.path.exists(IMAGES_PATH)
 
 
-# In[10]:
+# In[5]:
 
 
 if not os.path.exists(IMAGES_PATH):
@@ -68,31 +68,30 @@ for label in labels:
 
 # # 4. Capture Images
 
-# In[ ]:
+# In[6]:
 
 
+capPort = 0
 z = 0
 
 def output():
-    print('entered output')
-    if cap.isOpened():
-        print("[LOG] " + f'front vid // selected port is "0"')
+    
     while True:
-        ret, frame = cap.read()
-        frame1 = frame.copy()
+        ret, displayFrame = cap.read()
 
-        cv2.imshow('frame',frame)
+        cv2.imshow('frame',displayFrame)
         if z == 1:
             print('captured')
-            cv2.putText(frame, 'Captured', (640, 360), cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 255, 0), 2)
-        else:
-            print(f'z is {z}')
-        if cv2.waitKey(1) == ord('q'):
-            print('q pressed, breaking')
-            exit()
-            break
+            cv2.putText(displayFrame, 'Captured', (640, 360), cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 255, 0), 2)
+            time.sleep(1)
         else:
             continue
+        if cv2.waitKey(1) == ord('q'):
+            print('q pressed, breaking')
+            break
+        else:
+            print('. \n')
+
     cap.release()
     cv2.destroyAllWindows()
     
@@ -101,22 +100,23 @@ def output():
 
 def __capture__():  
     global cap, z
-    print('entered capture function')
     read, pictureFrame = cap.read()
     i = 0
     y = 0
-    print('[LOG] : entered for in loop -- label')
     while i <= number_imgs and y<= (len(labels)-1):
         # print(f'Collecting images for {labels[y]}')
         if keyboard.is_pressed('c'):
                 z = 1
-                print('Collecting image {}'.format(i))
+                print(f'Collecting image {i} at labels {labels[y]}')
+
                 imgname = os.path.join(IMAGES_PATH,labels[y],labels[y]+'.'+'{}.jpg'.format(str(uuid.uuid1())))
                 cv2.imwrite(imgname, pictureFrame)
                 i +=1
                 time.sleep(1)
+
                 if i == number_imgs:
                     y+=1
+                
                 if keyboard.is_pressed('q'):
                     cv2.release
                     exit()
@@ -127,19 +127,19 @@ def __capture__():
 
 def threader():
     global cap
-    cap = cv2.VideoCapture(0)
+    
+    cap = cv2.VideoCapture(capPort)
+    if not cap.isOpened():
+        raise Exception(f'cap -- check port // port {capPort} is not available')
+    
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+    
     th = threading.Thread(target= output)
     th1 = threading.Thread(target= __capture__)
     
     th.start()
-    print('thread initialized \n')
-    print(cap.isOpened())
-
     th1.start()
-    print('thread1 initialized \n')
-
     if keyboard.is_pressed('q'):
         print('q pressed kill thread')
         th.join() # maybe use th.terminate()
