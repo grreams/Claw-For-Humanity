@@ -4,11 +4,24 @@ import math
 import struct
 import serial
 import serial.tools.list_ports
-import tkinter
+import tkinter as tk
 
 
-
-
+def interface():
+    window = tk.Tk()
+    window.title("Project Claw For Humanity Main Window")
+    window.geometry("600x240")
+    window.resizable(True,True)
+    lable = tk.Label(window, text='select com port', font=('Arial', 15))
+    lable.place(x=250,y=0)
+    
+    ent = tk.Entry(window)
+    ent.place(x = 250, y = 100)
+    
+    
+    btn = tk.Button(window, text='Next')
+    btn.config(command=__startPort__())
+    btn.place(x= 250, y = 300)
 
                         # camera work
 # global variables for contour ***DO NOT CHANGE***
@@ -260,7 +273,9 @@ def __work__():
 
 
 # start from here
-__initialize__()
+# __initialize__()
+
+interface()
 
 
 # color selection
