@@ -32,7 +32,7 @@ void parseCommand(String commandString) {
   } else {
     // handle error if not an int !!
     commandInt = commandString.toInt();
-    if (!commandInt % 2){
+    if (commandInt % 2){
       turnOffDevice(commandInt / 2);
     } else {
       turnOnDevice((commandInt + 1) / 2);
@@ -52,11 +52,11 @@ void executeCommand() {
 
 void turnOnDevice(int deviceNumber) {
   // Perform actions to turn on the specified device
-  digitalWrite(deviceNumber, HIGH);
+  digitalWrite(deviceNumber + 1, HIGH);
 }
 
 void turnOffDevice(int deviceNumber) {
   // Perform actions to turn off the specified device
-  digitalWrite(deviceNumber, LOW);
+  digitalWrite(deviceNumber + 1, LOW);
 }
   
