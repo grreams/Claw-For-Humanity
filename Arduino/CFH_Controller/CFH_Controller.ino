@@ -2,7 +2,7 @@ String incomingString;
 String command;
 int argument;
 int commandInt;
-
+//служу советскому союзу 🫡
 void setup() {
   pinMode(2, OUTPUT);
   pinMode(3, OUTPUT);
