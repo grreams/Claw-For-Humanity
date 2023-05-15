@@ -1,6 +1,7 @@
 String incomingString;
 String command;
 int argument;
+int commandInt;
 
 void setup() {
   pinMode(2, OUTPUT);
@@ -28,6 +29,14 @@ void parseCommand(String commandString) {
     argument = commandString.substring(separatorIndex + 1).toInt(); // Extract the argument as an integer
 
     executeCommand();
+  } else {
+    // handle error if not an int !!
+    commandInt = commandString.toInt();
+    if (!commandInt % 2){
+      turnOffDevice(commandInt / 2);
+    } else {
+      turnOnDevice((commandInt + 1) / 2);
+    }
   }
 }
 
