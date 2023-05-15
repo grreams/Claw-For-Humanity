@@ -51,4 +51,3 @@ void turnOffDevice(int deviceNumber) {
   digitalWrite(deviceNumber, LOW);
 }
   
-}
