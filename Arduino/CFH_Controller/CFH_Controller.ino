@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////
-//   CLAW FOR HUMANITY v2.2, THSS Robotics Team © 2023   //
+//   CLAW FOR HUMANITY v2.3, THSS Robotics Team © 2023   //
 ///////////////////////////////////////////////////////////
 //                       Commands:                       //
 // 1,2 - ON, OFF Solenoid #1 | 3,4 - ON, OFF Solenoid #2 //
@@ -158,8 +158,8 @@ void loop() {
     if (str == "16") {  //ALL PISTONS ON
       digitalWrite(cyl1, HIGH);
       digitalWrite(cyl2, HIGH);
-      digitalWrite(cyl3, HIGH);
-      digitalWrite(cyl4, HIGH);
+      //digitalWrite(cyl3, HIGH);
+      //digitalWrite(cyl4, HIGH);
       select();
       Serial.println("** All Pistons ON **");
     }
@@ -174,15 +174,15 @@ void select() {
 
 void emerStop() {
   tone(8, 600);
-  delay(1000);  
+  delay(1000);
   noTone(8);
   delay(1000);
   tone(8, 600);
-  delay(1000);  
+  delay(1000);
   noTone(8);
   delay(1000);
   tone(8, 600);
-  delay(1000);  
+  delay(1000);
   noTone(8);
   delay(1000);
 }
@@ -191,10 +191,10 @@ void selfTest() {
   Serial.println("** SELF_TEST ** Starting the system Self-Test...");
 
   tone(8, 600);
-  delay(1000);  
+  delay(1000);
   noTone(8);
   delay(1000);
-
+  ///
   Serial.println("** SELF_TEST ** Turning off all Solenoids, Drive, Master Solenoid...");
   digitalWrite(cyl1, LOW);
   digitalWrite(cyl2, LOW);
@@ -204,45 +204,78 @@ void selfTest() {
   digitalWrite(drve, HIGH);
 
   tone(8, 600);
-  delay(1000);  
+  delay(1000);
   noTone(8);
   delay(1000);
-  
+  tone(8, 600);
+  delay(1000);
+  noTone(8);
+  delay(1000);
+  ///
   Serial.println("** SELF_TEST ** Checking Solenoids...");
-  delay(2000);
+
+  digitalWrite(mstr, HIGH);
+  tone(8, 600);
+  delay(1000);
+  noTone(8);
+  delay(1000);
   digitalWrite(cyl1, HIGH);
+  select();
   delay(1500);
   digitalWrite(cyl1, LOW);
+  select();
   delay(2000);
   digitalWrite(cyl2, HIGH);
+  select();
   delay(1500);
   digitalWrite(cyl2, LOW);
+  select();
   delay(2000);
-  digitalWrite(cyl3, HIGH);
-  delay(1500);
-  digitalWrite(cyl3, LOW);
-  delay(2000);
-  digitalWrite(cyl4, HIGH);
-  delay(1500);
-  digitalWrite(cyl4, LOW);
 
-  delay(3000);
-  Serial.println("** SELF_TEST ** Checking the Master Solenoid...");
-  delay(2000);
-  digitalWrite(mstr, HIGH);
-  delay(1000);
+  digitalWrite(cyl1, HIGH);
+  digitalWrite(cyl2, HIGH);
+  select();
+  delay(1500);
+  digitalWrite(cyl1, LOW);
+  digitalWrite(cyl2, LOW);
+  select();
+  delay(2500);
+
   digitalWrite(mstr, LOW);
-
-  delay(3000);
+  Serial.println("** SELF_TEST ** Solenoids Checked!");
+  ///
+  delay(2500);
+  Serial.println("** SELF_TEST ** Checking the Master Solenoid...");
+  delay(1000);
+  digitalWrite(mstr, HIGH);
+  select();
+  delay(1500);
+  digitalWrite(mstr, LOW);
+  select();
+  Serial.println("** SELF_TEST ** Master Solenoid Checked!");
+  ///
+  delay(2500);
   Serial.println("** SELF_TEST ** Checking the Drive...");
-  delay(2000);
   digitalWrite(drve, LOW);
+  select();
   delay(5000);
   digitalWrite(drve, HIGH);
-
-  tone(8, 600);
-  delay(2000);
-  noTone(8);
+  select();
+  Serial.println("** SELF_TEST ** Drive Checked!");
+  delay(3000);
+  ///
   Serial.println("** SELF_TEST ** System Self-Test completed!");
+  tone(8, 600);
+  delay(1000);
+  noTone(8);
+  delay(1000);
+  tone(8, 600);
+  delay(1000);
+  noTone(8);
+  delay(1000);
+  tone(8, 600);
+  delay(1000);
+  noTone(8);
+  delay(2500);
   setup();
 }
